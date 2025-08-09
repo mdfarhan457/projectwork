@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vertical Slide Login/Register</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      transition: background 1s ease;
+    }
+
+    .container {
+      width: 850px;
+      max-width: 100%;
+      height: 550px;
+      background: #fff;
+      border-radius: 30px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      position: relative;
+    }
+
+    .left, .right {
+      width: 50%;
+      height: 100%;
+      position: relative;
+      transition: all 0.6s ease;
+      overflow: hidden;
+    }
+
+    .left {
+      background: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4') center/cover no-repeat;
+      color: white;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .left::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+
+    .left * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .left h1 {
+      margin-bottom: 20px;
+    }
+
+    .left input, .left button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .left input {
+      border: 1px solid #ccc;
+    }
+
+    .left button {
+      background: #6c63ff;
+      color: white;
+      cursor: pointer;
+    }
+
+    .left button:hover {
+      background: #5745d4;
+    }
+
+    .right {
+      background: #f2f2ff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .login-form {
+      position: absolute;
+      right: -100%;
+      top: 0;
+      height: 100%;
+      width: 50%;
+      background: white;
+      z-index: 3;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.6s ease;
+      opacity: 0;
+      border-left: 2px solid #eee;
+    }
+
+    .login-form.active {
+      right: 0;
+      opacity: 1;
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .login-form button {
+      padding: 10px 20px;
+      background: #6c63ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    lottie-player {
+      width: 200px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .left, .right, .login-form {
+        width: 100%;
+        position: relative;
+        height: auto;
+      }
+
+      .login-form {
+        right: 0;
+        opacity: 1;
+        position: relative;
+        border-left: none;
+        padding-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Left Registration Form -->
+  <div class="left">
+    <h1>Register</h1>
+    <form onsubmit="return showPopup(event)">
+      <input type="text" placeholder="Username" required>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit">Register</button>
+    </form>
+    <p style="margin-top: 15px;">Already have an account?</p>
+    <button onclick="showLogin()">Login</button>
+  </div>
+
+  <!-- Right Side with Animation -->
+  <div class="right">
+    <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_jcikwtux.json"
+      background="transparent" speed="1" loop autoplay></lottie-player>
+    <h2>Welcome!</h2>
+    <p>Please click login if you already have an account.</p>
+  </div>
+
+  <!-- Hidden Login Form Sliding In -->
+  <div class="login-form" id="loginForm">
+    <h2>Login</h2>
+    <form onsubmit="return alert('Logged in!')">
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <button onclick="hideLogin()" style="margin-top: 20px;">Back to Register</button>
+  </div>
+</div>
+
+<script>
+  function showLogin() {
+    document.getElementById('loginForm').classList.add('active');
+  }
+
+  function hideLogin() {
+    document.getElementById('loginForm').classList.remove('active');
+  }
+
+  function showPopup(e) {
+    e.preventDefault();
+    alert("Thank you for registering!");
+    return false;
+  }
+
+  // Optional background animation
+  const colors = [
+    "linear-gradient(135deg, #6e8efb, #a777e3)",
+    "linear-gradient(135deg, #f6d365, #fda085)",
+    "linear-gradient(135deg, #89f7fe, #66a6ff)",
+    "linear-gradient(135deg, #ff9a9e, #fad0c4)"
+  ];
+  let i = 0;
+  setInterval(() => {
+    document.body.style.background = colors[i];
+    i = (i + 1) % colors.length;
+  }, 5000);
+</script>
+
+</body>
+</html>

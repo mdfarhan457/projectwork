@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mock Interview - Face to Face</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?fit=crop&w=1470&q=80') no-repeat center center/cover;
+      color: white;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+    }
+
+    input, select, button {
+      padding: 10px;
+      width: 250px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    button {
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      color: white;
+      cursor: pointer;
+    }
+
+    #interview, #result {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    video {
+      width: 320px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="start-form">
+      <h1>Mock Interview Platform</h1>
+      <input type="text" id="username" placeholder="Enter your name" required />
+      <select id="domain" required>
+        <option value="">Select Domain</option>
+        <option value="bpo">BPO</option>
+        <option value="kpo">KPO</option>
+        <option value="it">IT</option>
+      </select>
+      <button onclick="startInterview()">Start Interview</button>
+    </div>
+
+    <div id="interview">
+      <h2>Interview in Progress...</h2>
+      <video id="interviewerVideo" autoplay muted playsinline></video>
+      <button onclick="endInterview()">Submit Answers</button>
+    </div>
+
+    <div id="result">
+      <h2>Interview Feedback</h2>
+      <p><strong>Name:</strong> <span id="resultName"></span></p>
+      <p><strong>Domain:</strong> <span id="resultDomain"></span></p>
+      <p><strong>Score:</strong> <span id="resultScore"></span>%</p>
+      <p><strong>Feedback:</strong> <span id="resultFeedback"></span></p>
+      <p><strong>Your Answer:</strong> <span id="userAnswer"></span></p>
+    </div>
+  </div>
+
+  <script>
+    const videos = {
+      bpo: 'https://cdn.videvo.net/videvo_files/video/free/video0487/large_watermarked/_import_623c9a9f4011c9.18817855_preview.mp4',
+      kpo: 'https://cdn.videvo.net/videvo_files/video/free/video0462/large_watermarked/_import_6183a0d7eb76e6.35428012_preview.mp4',
+      it: 'https://cdn.videvo.net/videvo_files/video/free/video0452/large_watermarked/_import_616d75de2211a2.53799687_preview.mp4'
+    };
+
+    let recognition;
+    let userResponse = "";
+
+    function startInterview() {
+      const name = document.getElementById("username").value;
+      const domain = document.getElementById("domain").value;
+      if (!name || !domain) {
+        alert("Please enter your name and select domain.");
+        return;
+      }
+
+      document.getElementById("start-form").style.display = "none";
+      document.getElementById("interview").style.display = "flex";
+      const video = document.getElementById("interviewerVideo");
+      video.src = videos[domain];
+      video.play();
+
+      // Start speech recognition
+      if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onresult = (event) => {
+          userResponse = event.results[0][0].transcript;
+        };
+
+        recognition.start();
+      } else {
+        alert("Speech Recognition not supported in this browser.");
+      }
+
+      // End interview after 20 seconds
+      setTimeout(() => {
+        endInterview();
+      }, 20000);
+    }
+
+    function endInterview() {
+      if (recognition) recognition.stop();
+      document.getElementById("interview").style.display = "none";
+      document.getElementById("result").style.display = "flex";
+
+      const name = document.getElementById("username").value;
+      const domain = document.getElementById("domain").value;
+
+      document.getElementById("resultName").textContent = name;
+      document.getElementById("resultDomain").textContent = domain.toUpperCase();
+      document.getElementById("userAnswer").textContent = userResponse || "No answer detected.";
+
+      const keywords = ["team", "communication", "problem", "solution", "experience"];
+      let score = 60;
+      keywords.forEach(word => {
+        if (userResponse.toLowerCase().includes(word)) score += 8;
+      });
+      if (score > 100) score = 100;
+
+      document.getElementById("resultScore").textContent = score;
+
+      let feedback = "Good attempt.";
+      if (score < 70) feedback = "Improve clarity and add relevant keywords.";
+      else if (score < 85) feedback = "Good, but could be more detailed.";
+      else feedback = "Excellent response with key points.";
+
+      document.getElementById("resultFeedback").textContent = feedback;
+    }
+  </script>
+</body>
+
+</html>

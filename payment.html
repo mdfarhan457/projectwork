@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment - Flipkart Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f1f3f6;
+      padding: 40px;
+    }
+
+    .payment-container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .payment-header {
+      background: #2874f0;
+      color: #fff;
+      padding: 20px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .payment-methods {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .method {
+      padding: 15px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fafafa;
+    }
+
+    .method:hover,
+    .method.active {
+      border-color: #2874f0;
+      background: #e8f0fe;
+    }
+
+    .method input[type="radio"] {
+      accent-color: #2874f0;
+      cursor: pointer;
+    }
+
+    .details-section {
+      display: none;
+      padding: 20px;
+      border-top: 1px solid #ddd;
+      background: #f9f9f9;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .details-section input,
+    .details-section select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .btn {
+      background: #2874f0;
+      color: #fff;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background: #0b59d0;
+    }
+
+    @media(max-width: 600px) {
+      .payment-container {
+        margin: 10px;
+      }
+    }
+
+    /* <new feature> */
+    .payment-partners {
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      padding: 30px 20px;
+      margin: 40px auto;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 800px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .payment-partners h3,
+    .payment-partners h4 {
+      color: #2874f0;
+      margin-bottom: 20px;
+    }
+
+    .icon-row {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .icon-row img {
+      height: 50px;
+      transition: transform 0.4s ease;
+      filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.1));
+      cursor: pointer;
+    }
+
+    .icon-row img:hover {
+      transform: scale(1.1) translateY(-5px);
+    }
+
+    .icon-row.banks img {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+footer {
+  text-align: center;
+}
+    /* <new feature> */
+  </style>
+</head>
+
+<body>
+
+  <div class="payment-container">
+    <div class="payment-header">Select Your Payment Method</div>
+
+    <div class="payment-methods">
+      <div class="method" onclick="selectMethod('upi')">
+        <input type="radio" name="payment" id="upi" /> <label for="upi">UPI</label>
+      </div>
+      <div class="method" onclick="selectMethod('cod')">
+        <input type="radio" name="payment" id="cod" /> <label for="cod">Cash on Delivery</label>
+      </div>
+      <div class="method" onclick="selectMethod('card')">
+        <input type="radio" name="payment" id="card" /> <label for="card">Credit / Debit Card</label>
+      </div>
+      <div class="method" onclick="selectMethod('netbanking')">
+        <input type="radio" name="payment" id="netbanking" /> <label for="netbanking">Net Banking</label>
+      </div>
+    </div>
+
+    <!-- UPI Details -->
+    <div class="details-section" id="upi-details">
+      <h4>Enter your UPI ID</h4>
+      <input type="text" placeholder="example@upi">
+      <button class="btn">Pay with UPI</button>
+    </div>
+
+    <!-- COD Details -->
+    <div class="details-section" id="cod-details">
+      <h4>Cash on Delivery</h4>
+      <p>You will pay when the product is delivered.</p>
+      <button class="btn">Place Order</button>
+    </div>
+
+    <!-- Card Details -->
+    <div class="details-section" id="card-details">
+      <h4>Enter Card Details</h4>
+      <input type="text" id="cardNumber" placeholder="Card Number" maxlength="16" oninput="detectBank()" />
+      <input type="text" placeholder="Card Holder Name" />
+      <input type="text" placeholder="MM/YY" />
+      <input type="text" placeholder="CVV" maxlength="3" />
+      <input type="text" id="bankName" placeholder="Bank Name (Autofilled)" readonly />
+      <button class="btn">Pay Now</button>
+    </div>
+
+    <!-- Netbanking -->
+    <div class="details-section" id="netbanking-details">
+      <h4>Select Your Bank</h4>
+      <select>
+        <option>Select Bank</option>
+        <option>State Bank of India</option>
+        <option>HDFC Bank</option>
+        <option>ICICI Bank</option>
+        <option>Axis Bank</option>
+        <option>Kotak Bank</option>
+      </select>
+      <button class="btn">Proceed to Net Banking</button>
+    </div>
+  </div>
+
+  <!-- Congratulations Popup -->
+  <div id="congratsPopup" style="
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    padding: 30px 50px;
+    text-align: center;
+    z-index: 9999;
+  ">
+    <h2 style="color: #2874f0;">🎉 Congratulations!</h2>
+    <p>Your payment was successfully submitted!</p>
+  </div>
+  <!-- <new feature> -->
+  <!-- Payment Partners & Banks -->
+  <section class="payment-partners">
+    <h3>Trusted Payment Partners</h3>
+    <div class="icon-row">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" />
+      <img src="https://www.guidance.com/hs-fs/hubfs/amazonpay-logo-rgb_clr.png?width=1000&height=230&name=amazonpay-logo-rgb_clr.png" alt="amazonepay"/>
+    <img src="https://repository-images.githubusercontent.com/724163209/43f4d14d-1d8f-49f8-b955-6fded109f992" alt="PhonePe" />
+    </div>
+
+    <h4>Banking Partners</h4>
+    <div class="icon-row banks">
+      <img src="https://logowik.com/content/uploads/images/idfc-first-bank8846.jpg" alt="IDFC Bank" />
+      <img src="https://tse3.mm.bing.net/th/id/OIP.tTQ1osTMPsBIApNSF_SWhgHaEK?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Bank of India" />
+      <img src="https://seeklogo.com/images/K/kotak-logo-309A6D36C3-seeklogo.com.png" alt="Kotak Bank" />
+    </div>
+  </section>
+<footer>
+   <p>© 2025 Cloth Store. All Rights Reserved.</p>
+</footer>
+  <!-- <new feature> -->
+  <script>
+    function selectMethod(method) {
+      document.querySelectorAll('.method').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.details-section').forEach(el => el.style.display = 'none');
+      document.getElementById(method).checked = true;
+      document.getElementById(method + '-details').style.display = 'block';
+      document.querySelector(`.method[onclick="selectMethod('${method}')"]`).classList.add('active');
+    }
+
+    function detectBank() {
+      const number = document.getElementById("cardNumber").value;
+      let bank = "";
+      if (number.startsWith("4")) bank = "Visa Bank";
+      else if (number.startsWith("5")) bank = "MasterCard Bank";
+      else if (number.startsWith("6")) bank = "RuPay Bank";
+      else bank = "";
+      document.getElementById("bankName").value = bank;
+    }
+
+    function showCelebration() {
+      const popup = document.getElementById("congratsPopup");
+      popup.style.display = "block";
+
+      // Launch confetti
+      confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 3000);
+    }
+
+    // Bind click event to all .btn
+    document.querySelectorAll(".btn").forEach(button => {
+      button.addEventListener("click", function (e) {
+        e.preventDefault(); // prevent default form submit behavior
+        showCelebration();
+      });
+    });
+  </script>
+
+</body>
+
+</html>

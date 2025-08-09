@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Cloth Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* <header section> */
+        body {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background: linear-gradient(45deg, #d848a1, #68fa88);
+        }
+
+        nav a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #ff9a9e;
+            transform: scale(1.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .price-card {
+            border: 20px solid grey;
+            box-shadow: 5px 10px 15px rgba(7, 45, 172, 0.896);
+            transition: transform 0.3s ease;
+        }
+
+        .price-card:hover {
+            transform: translateY(-50px);
+            cursor: pointer;
+            background-color: rgba(76, 218, 208, 0.362);
+        }
+
+
+
+        .animate-section {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .carousel-inner img {
+            width: 100%;
+            max-height: 1500px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+        }
+
+        /* stickyheader */
+        nav.navbar {
+            background: linear-gradient(45deg, #d848a1, #3b7b49);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+
+
+        /* nav a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #ff9a9e;
+            transform: scale(1.1);
+            transition: transform 0.3s ease-in-out;
+        } */
+
+        /* stickyheaderend */
+
+
+        nav.container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-input:hover {
+            border-color: #0984e3;
+            background-color: #dfe6e9;
+        }
+
+        .search-input:focus {
+            border-color: #6c5ce7;
+            background-color: #ffeaa7;
+        }
+
+        .search-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #0984e3;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #6c5ce7;
+            transform: scale(1.1);
+        }
+
+        .search-button:active {
+            background-color: #d63031;
+        }
+
+        .search-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* <!-- product like section --> */
+
+        .product-card {
+            text-align: center;
+            border: none;
+            padding: 15px;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .product-price {
+            color: #007b00;
+            font-weight: bold;
+        }
+
+        .product-mrp {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .discount {
+            background-color: green;
+            color: white;
+            padding: 2px 6px;
+            font-size: 0.9rem;
+            border-radius: 3px;
+        }
+
+        .like-button {
+            font-size: 1.5rem;
+            color: gray;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .like-button:hover {
+            color: red;
+        }
+
+        .product-card.zoomed {
+            transform: scale(1.1);
+            z-index: 10;
+            transition: transform 0.4s ease-in-out;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card.zoomed img {
+            transform: scale(1.05);
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .product-card img {
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .product-card p {
+            transition: transform 0.4s ease-in-out;
+        }
+
+        /* <footer section start> */
+
+        .site-footer {
+            background: linear-gradient(45deg, #ed60f5, #6a11cb);
+            color: white;
+            padding: 40px 20px 0;
+            font-family: 'Segoe UI', sans-serif;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            /* ✅ spread columns */
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 30px;
+            text-align: left;
+        }
+
+        .footer-container>div {
+            flex: 1 1 250px;
+            padding: 10px;
+        }
+
+        .site-footer h4 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .site-footer p,
+        .site-footer li {
+            font-size: 14px;
+            color: #e0e0e0;
+            list-style: none;
+            margin-bottom: 8px;
+        }
+
+        .site-footer a {
+            color: #fad0c4;
+            text-decoration: none;
+        }
+
+        .site-footer a:hover {
+            color: #ff9a9e;
+        }
+
+        .site-footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .site-footer .social-icons i {
+            font-size: 20px;
+            margin-right: 10px;
+            color: white;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .site-footer .social-icons i:hover {
+            color: #ff9a9e;
+        }
+
+        .site-footer .footer-bottom {
+            text-align: center;
+            padding: 20px 10px;
+            font-size: 13px;
+            color: #ccc;
+            border-top: 1px solid #444;
+        }
+
+
+
+        /* <footer section end> */
+    </style>
+
+
+
+</head>
+
+<body>
+    <!-- Navigation Section -->
+    <nav class="navbar navbar-expand-lg p-3">
+        <div class="container">
+            <a class="navbar-brand" href="#">Cloth Store</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- search bar -->
+
+            <div class="search-container">
+                <input type="text" class="search-input" id="animatedSearch" placeholder="Search here...">
+
+                <button class="search-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- search bar end -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#Home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#Shop">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#footer">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html">SingUp</a></li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link position-relative">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                0
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+    </nav>
+
+    <!-- img slider start -->
+    <section id="Home">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+            </div>
+
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="img bootstrap/crop2.png" class="d-block w-100" alt="Fashion Collection 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="img bootstrap/cloth ads1.jpg" class="d-block w-100" alt="Fashion Collection 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="img bootstrap/cloth ads4.jpg" class="d-block w-100" alt="Fashion Collection 3">
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+    <!-- img slider end  -->
+    <!-- Price Card Section -->
+    <div class="container my-5 animate-section">
+        <div class="row text-center">
+            <h2 class="mb-4">Our Latest Collections</h2>
+            <div class="col-md-4 mb-4">
+                <div class="card price-card">
+                    <img src="img bootstrap/casual dess.webp" class="card-img-top" alt="Cloth 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Casual Shirt</h5>
+                        <p class="card-text">$29.99</p>
+                        <a href="#" class="btn btn-primary">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card price-card">
+                    <img src="img bootstrap/formal2.jpg" class="card-img-top" alt="Cloth 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Formal Suit</h5>
+                        <p class="card-text">$99.99</p>
+                        <a href="#" class="btn btn-primary">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card price-card">
+                    <img src="img bootstrap/edit design dress.png" class="card-img-top" alt="Cloth 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Designer Dress</h5>
+                        <p class="card-text">$49.99</p>
+                        <a href="#" class="btn btn-primary">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- like section start -->
+    <section id="Shop" class="container mt-4">
+        <h2 class="text-center">Elevate Your Style</h2>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Men's G Elite Golf Shoes" class="product-image">
+                    <p class="product-title">Men's G Elite Golf Shoes</p>
+                    <p class="product-price">₹6,300.00 <span class="product-mrp">₹12,600.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Cotton Jersey Sport T-shirt" class="product-image">
+                    <p class="product-title">Cotton Jersey Sport T-shirt</p>
+                    <p class="product-price">₹3,375.00 <span class="product-mrp">₹6,750.00</span> <span
+                            class="discount">50%
+                            OFF</span></p>
+                    <span class="like-button">❤</span>6
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/sport tshirt - Copy.webp" alt="Sport Zipped Training Jacket"
+                        class="product-image">
+                    <p class="product-title">Men Slim Fit Str Casusal Shriped Shirt</p>
+                    <p class="product-price">₹800.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title"></p>
+                    <p class="product-price">₹7,250.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title"></p>
+                    <p class="product-price">₹7,250.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title"></p>
+                    <p class="product-price">₹7,250.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/sport tshirt - Copy.webp" alt="Sport Zipped Training Jacket"
+                        class="product-image">
+                    <p class="product-title"></p>
+                    <p class="product-price">₹7,250.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title"></p>
+                    <p class="product-price">₹7,250.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/sport tshirt - Copy.webp" alt="Sport Zipped Training Jacket"
+                        class="product-image">
+                    <p class="product-title">Sport Zipped Training Jacket</p>
+                    <p class="product-price">₹7,250.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title">Men Slim Fit Checkered Spread Shirt</p>
+                    <p class="product-price">₹800.00 <span class="product-mrp">₹1600.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title">Men Oversized Fit Solid Cut Away Casual Shirt</p>
+                    <p class="product-price">₹700.00 <span class="product-mrp">₹1400.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title">Men Loose Fit Mid Rise Light Blue Jeans</p>
+                    <p class="product-price">₹2600.00 <span class="product-mrp">₹1300.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title">Varcity Jacket</p>
+                    <p class="product-price">₹7,250.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title">Sport Jacket</p>
+                    <p class="product-price">₹7,250.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="img bootstrap/ziped jacket.jpg" alt="Sport Zipped Training Jacket" class="product-image">
+                    <p class="product-title">Denim Jacket</p>
+                    <p class="product-price">₹7,250.00 <span class="product-mrp">₹14,500.00</span> <span
+                            class="discount">50% OFF</span></p>
+                    <span class="like-button">❤</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- like section end  -->
+        <!-- CART MODAL START -->
+        <div class="modal " id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Your Cart</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="cartItems">
+                        <p class="text-muted">No products added yet.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- CART MODAL END -->
+        <!-- Footer Section -->
+        <!-- Footer Section -->
+        <footer id="footer" class="site-footer">
+            <div class="footer-container">
+                <div>
+                    <h4>About ClothStore</h4>
+                    <p>Crafting fashion with purpose — quality, comfort, and conscious design</p>
+                    <div class="social-icons">
+                        <i class="fab fa-facebook"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-x-twitter"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li>Trends Go</li>
+                        <li>Brewing Guides</li>
+                        <li>Sustainability</li>
+                        <li>Wholesale</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i>
+                            <a href="https://maps.google.com/?q=Megdooy+Market+Phusro+Bokaro" target="_blank">
+                                Megdoot Market Phusro, Bokaro</a>
+                        </li>
+                        <li><i class="fas fa-phone"></i>
+                            <a href="tel:9263089911"> (9263-089-911)</a>
+                        </li>
+                        <li><i class="fas fa-envelope"></i>
+                            <a href="mailto:mdfarhan343khangmail.com"> mdfarhan343khangmail.com</a>
+                        </li>
+                        <li><i class="fas fa-clock"></i>
+                            <a href="#clock"> Mon-Sat: 7am - 8pm</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 Cloth Store. All Rights Reserved.</p>
+                <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </footer>
+
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- footerend section -->
+        <script>
+            // Product Zoom on Click
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('zoomed');
+                });
+            });
+
+            // Animated Search Placeholder
+            const searchPhrases = [
+                "Search your style...",
+                "Find latest trends...",
+                "Discover new arrivals...",
+                "Get your perfect fit...",
+                "Explore summer collections..."
+            ];
+
+            let phraseIndex = 0;
+            const searchInput = document.getElementById('animatedSearch');
+            setInterval(() => {
+                searchInput.placeholder = searchPhrases[phraseIndex];
+                phraseIndex = (phraseIndex + 1) % searchPhrases.length;
+            }, 2500); // Change every 2.5 seconds
+
+            // LIKE TO CART
+            const likedProducts = [];
+            const cartBadge = document.querySelector('.badge');
+            const cartItemsContainer = document.getElementById('cartItems');
+
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const card = this.closest('.product-card');
+                    const title = card.querySelector('.product-title').innerText;
+                    const price = card.querySelector('.product-price').innerText;
+                    const imgSrc = card.querySelector('.product-image').src;
+
+                    this.style.color = this.style.color === 'red' ? 'gray' : 'red';
+
+                    if (!likedProducts.find(item => item.title === title)) {
+                        likedProducts.push({ title, price, imgSrc });
+                        cartBadge.innerText = likedProducts.length;
+                    }
+                });
+            });
+            // LIKE TO CART
+            document.querySelector('.fa-shopping-cart').addEventListener('click', function (e) {
+                e.preventDefault();
+                if (likedProducts.length === 0) {
+                    cartItemsContainer.innerHTML = '<p class="text-muted">No products added yet.</p>';
+                } else {
+                    cartItemsContainer.innerHTML = likedProducts.map(product => `
+            <div class="d-flex align-items-center mb-3">
+                <img src="${product.imgSrc}" style="width: 80px; border-radius: 5px; margin-right: 15px;">
+                <div>
+                    <h6 class="mb-1">${product.title}</h6>
+                    <p class="mb-2">${product.price}</p>
+                    <a href="payment.html" style="text-decoration: none;">
+    <button   
+        class="btn text-white fw-semibold"
+        style="background: linear-gradient(135deg, #28a745, #218838); border: none; border-radius: 8px; padding: 6px 12px;">
+        Buy Now
+    </button>
+</a>
+
+                </div>
+            </div>
+        `).join('');
+                }
+
+                const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+                cartModal.show();
+            });
+            // <filter search start>
+
+            // Search filter logic
+            const searchInputField = document.getElementById('animatedSearch');
+
+            searchInputField.addEventListener('input', function () {
+                const searchValue = this.value.toLowerCase().trim();
+                const allProducts = document.querySelectorAll('.product-card');
+
+                allProducts.forEach(product => {
+                    const title = product.querySelector('.product-title').innerText.toLowerCase();
+                    if (title.includes(searchValue)) {
+                        product.parentElement.style.display = 'block'; // show parent col-md-4
+                    } else {
+                        product.parentElement.style.display = 'none'; // hide it
+                    }
+                });
+            });
+
+
+            // <filter search end>
+
+
+        </script>
+
+
+
+</body>
+
+</html>
